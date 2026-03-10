@@ -47,7 +47,7 @@
   #cur-spot {
     position: fixed;
     pointer-events: none;
-    z-index: 9990;
+    z-index: 100001;
     width: 380px; height: 380px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -74,7 +74,7 @@
   #cur-dot {
     position: fixed;
     pointer-events: none;
-    z-index: 10000;
+    z-index: 100002;
     width: 5px; height: 5px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -817,7 +817,7 @@
   #intro-photo {
     position: absolute; inset: 0;
     background-size: cover;
-    background-position: center 20%;
+    background-position: center 35%;
     opacity: 0;
     animation: introFade 2s ease 0.4s forwards;
     filter: brightness(0.68) contrast(1.1);
@@ -1200,49 +1200,61 @@
     if (!intro) return;
 
     let startX = 0, curX = 0, dragging = false;
-    const THRESHOLD = window.innerWidth * 0.22;
+    const THRESHOLD = 100;
 
     function dismiss() {
-      intro.style.transition = 'none';
-      intro.classList.add('slide-out');
-      intro.addEventListener('animationend', () => {
-        intro.style.display = 'none';
-      }, { once: true });
+      dragging = false;
+      intro.style.transition = 'transform 0.75s cubic-bezier(0.77,0,0.18,1), opacity 0.75s ease';
+      intro.style.transform  = 'translateX(100vw)';
+      intro.style.opacity    = '0';
+      setTimeout(() => { intro.style.display = 'none'; }, 800);
     }
 
-    function onStart(x) { startX = x; dragging = true; }
+    function onStart(x) {
+      startX = x;
+      curX = 0;
+      dragging = true;
+      intro.style.transition = 'none';
+    }
+
     function onMove(x) {
       if (!dragging) return;
       curX = Math.max(0, x - startX);
       intro.style.transform = 'translateX(' + curX + 'px)';
-      intro.style.opacity   = 1 - (curX / window.innerWidth) * 0.6;
+      intro.style.opacity   = String(1 - (curX / window.innerWidth) * 0.65);
     }
+
     function onEnd() {
       if (!dragging) return;
       dragging = false;
       if (curX > THRESHOLD) {
         dismiss();
       } else {
-        intro.style.transition = 'transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease';
-        intro.style.transform  = '';
-        intro.style.opacity    = '';
-        setTimeout(() => intro.style.transition = '', 420);
+        intro.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1), opacity 0.45s ease';
+        intro.style.transform  = 'translateX(0)';
+        intro.style.opacity    = '1';
       }
       curX = 0;
     }
 
-    // Touch
-    intro.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive:true });
-    intro.addEventListener('touchmove',  e => onMove(e.touches[0].clientX),  { passive:true });
+    // Touch events
+    intro.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+    intro.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e.touches[0].clientX); }, { passive: false });
     intro.addEventListener('touchend',   onEnd);
 
-    // Mouse drag
-    intro.addEventListener('mousedown', e => { onStart(e.clientX); e.preventDefault(); });
-    window.addEventListener('mousemove', e => { if(dragging) onMove(e.clientX); });
+    // Mouse drag events — attach to window so drag outside intro still works
+    intro.addEventListener('mousedown', e => {
+      if (e.target.id === 'intro-skip') return;
+      onStart(e.clientX);
+    });
+    window.addEventListener('mousemove', e => onMove(e.clientX));
     window.addEventListener('mouseup',   onEnd);
 
-    // Skip
-    document.getElementById('intro-skip').addEventListener('click', dismiss);
+    // Skip button
+    document.getElementById('intro-skip').addEventListener('click', e => {
+      e.stopPropagation();
+      dismiss();
+    });
   })();
 
 </script><script>
