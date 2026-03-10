@@ -816,9 +816,13 @@
   }
 
   .reveal {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.hidden {
     opacity: 0;
     transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
   }
   .reveal.visible {
     opacity: 1;
@@ -1286,9 +1290,18 @@
 
   // ===== SCROLL REVEAL =====
   const revealEls = document.querySelectorAll('.reveal');
+  // Add hidden class after a tiny delay so content shows if JS is slow
+  setTimeout(() => {
+    revealEls.forEach(el => el.classList.add('hidden'));
+  }, 100);
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.12 });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.remove('hidden');
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
   revealEls.forEach(el => observer.observe(el));
 
   // ===== CHATBOT =====
