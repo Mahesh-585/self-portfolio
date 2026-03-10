@@ -1119,7 +1119,7 @@
     <h2 class="reveal">Let's <em>Connect</em></h2>
     <p class="reveal rd1">Whether you have an exciting project, a collaboration idea, or just want to talk about ML and cybersecurity — my inbox is always open.</p>
     <div class="contact-links reveal rd2">
-      <a href="mailto:nandigamamahesh141@gmail.com" class="contact-email">✉ nandigamamahesh141@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#ea848b848e838d8b878b878b828f9982dbdedbaa8d878b8386c4898587" class="contact-email">✉ <span class="__cf_email__" data-cfemail="583639363c313f3935393539303d2b30696c69183f35393134763b3735">[email&#160;protected]</span></a>
       <a href="tel:+918688190510" class="contact-phone">📞 +91 86881 90510</a>
     </div>
   </div>
@@ -1151,6 +1151,8 @@
     <a href="https://github.com/Mahesh-585" target="_blank" rel="noopener noreferrer">GitHub</a>
     <span style="color:var(--text3)">·</span>
     <a href="https://www.instagram.com/only1.eleven?igsh=NGx6bGx4cm1oa2Ey" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <span style="color:var(--text3)">·</span>
+    <a href="https://www.linkedin.com/in/mahesh-nandigama-9a52b6226" target="_blank" rel="noopener noreferrer">LinkedIn</a>
   </div>
 </footer>
 
@@ -1178,7 +1180,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ══ INTRO SCREEN ══
   document.addEventListener('DOMContentLoaded', function() {
     const intro    = document.getElementById('intro');
@@ -1263,8 +1265,4 @@
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:MAHESH_CONTEXT, messages:[{role:'user',content:text}] })
-      });
-      const data=await res.json();
-      removeTyping();
-      const reply=data?.content?.[0]?.text||"Sorry, couldn't get a
+        body:JSON
